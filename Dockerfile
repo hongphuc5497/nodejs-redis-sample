@@ -12,4 +12,4 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
-CMD ["node", "server.js"]
+CMD ["yarn", "start"]
