@@ -2,7 +2,17 @@ import { createClient } from 'redis';
 
 (async () => {
 	try {
-		const client = createClient();
+		// const client = createClient({
+		// 	host: '127.0.0.1',
+		// 	port: 6379,
+		// });
+    const client = createClient({});
+
+		//* Subscribe to the channel
+		const subscriber = client.duplicate();
+		await subscriber.connect();
+		await subscriber.subscribe('article', (msg) => console.log(msg));
+
 		await client.connect();
 		await client.publish(
 			'article',
@@ -12,11 +22,6 @@ import { createClient } from 'redis';
 				blog: 'This is a blog post',
 			})
 		);
-
-		//* Subscribe to the channel
-		const subscriber = client.duplicate();
-		await subscriber.connect();
-		await subscriber.subscribe('article', (msg) => console.log(msg));
 	} catch (err) {
 		console.log(err);
 	} finally {
